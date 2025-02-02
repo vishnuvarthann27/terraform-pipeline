@@ -51,5 +51,5 @@ jobs:
     - name: Use Created IAM Role
       uses: aws-actions/configure-aws-credentials@v3
       with:
-        role-to-assume: ${{ env.IAM_ROLE_ARN }}
+        role-to-assume: ${{ secrets.IAM_ROLE_ARN }}
         aws-region: ${{ secrets.AWS_REGION }}

@@ -38,11 +38,8 @@ jobs:
 
     - name: Terraform Apply
       id: apply
-      run: |
-        terraform apply -auto-approve
-        echo "IAM_ROLE_ARN=$(terraform output -raw iam_role_arn)" >> $GITHUB_ENV
-        echo "S3_BUCKET_NAME=$(terraform output -raw s3_bucket_name)" >> $GITHUB_ENV
-        echo "DYNAMODB_TABLE_NAME=$(terraform output -raw dynamodb_table_name)" >> $GITHUB_ENV
+      run: terraform apply -auto-approve
+
 
     - name: Use Created IAM Role
       uses: aws-actions/configure-aws-credentials@v3

@@ -3,7 +3,7 @@ variable "aws_region" {
 }
 
 variable "s3_bucket_name" {
-  default = "my-terraform-state-bucket-123456"
+  default = "my-terraform-state-bucket-vishnu-2701"
 }
 
 variable "dynamodb_table_name" {

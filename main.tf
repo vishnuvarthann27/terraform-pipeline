@@ -51,9 +51,14 @@ resource "aws_iam_role" "terraform_role" {
       {
         Effect = "Allow"
         Principal = {
-          Service = "github-actions@github.com"
+          Federated = "arn:aws:iam::376163012258:oidc-provider/token.actions.githubusercontent.com"
         }
-        Action = "sts:AssumeRole"
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          StringEquals = {
+            "token.actions.githubusercontent.com:sub" = "repo:vishnuvarthann27/terraform-pipeline:ref:refs/heads/main"
+          }
+        }
       }
     ]
   })

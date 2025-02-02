@@ -17,3 +17,7 @@ variable "iam_role_name" {
 variable "environment" {
   default = "dev"
 }
+
+variable "eks_cluster_name" {
+  default     = "my-eks-cluster"
+}

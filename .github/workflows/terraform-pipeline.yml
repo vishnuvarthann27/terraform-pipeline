@@ -1,0 +1,50 @@
+name: Terraform AWS Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    name: Terraform Deployment
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.5.0
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Apply
+      id: apply
+      run: |
+        terraform apply -auto-approve
+        echo "IAM_ROLE_ARN=$(terraform output -raw iam_role_arn)" >> $GITHUB_ENV
+
+    - name: Display IAM Role
+      run: echo "Terraform created IAM Role ARN: $IAM_ROLE_ARN"
+
+    - name: Use Created IAM Role
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        role-to-assume: ${{ env.IAM_ROLE_ARN }}
+        aws-region: ${{ secrets.AWS_REGION }}
